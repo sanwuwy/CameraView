@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -17,6 +16,7 @@ import com.cjt2325.cameralibrary.lisenter.ErrorLisenter;
 import com.cjt2325.cameralibrary.lisenter.JCameraLisenter;
 import com.cjt2325.cameralibrary.util.DeviceUtil;
 import com.cjt2325.cameralibrary.util.FileUtil;
+import com.cjt2325.cameralibrary.util.Logger;
 
 import java.io.File;
 
@@ -32,13 +32,13 @@ public class CameraActivity extends AppCompatActivity {
         jCameraView = (JCameraView) findViewById(R.id.jcameraview);
         //设置视频保存路径
         jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "JCamera");
-        jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
+        jCameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
         jCameraView.setErrorLisenter(new ErrorLisenter() {
             @Override
             public void onError() {
                 //错误监听
-                Log.i("CJT", "camera error");
+                Logger.i("CJT", "camera error");
                 Intent intent = new Intent();
                 setResult(103, intent);
                 finish();
@@ -54,7 +54,7 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
-//                Log.i("JCameraView", "bitmap = " + bitmap.getWidth());
+//                Logger.i("JCameraView", "bitmap = " + bitmap.getWidth());
                 String path = FileUtil.saveBitmap("JCamera", bitmap);
                 Intent intent = new Intent();
                 intent.putExtra("path", path);
@@ -65,7 +65,7 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void recordSuccess(String url) {
                 //获取视频路径
-                Log.i("CJT", "url = " + url);
+                Logger.i("CJT", "url = " + url);
                 Intent intent = new Intent();
                 intent.putExtra("path", url);
                 setResult(102, intent);
@@ -79,7 +79,7 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        Log.i("CJT", DeviceUtil.getDeviceModel());
+        Logger.i("CJT", DeviceUtil.getDeviceModel());
     }
 
     @Override
@@ -104,14 +104,14 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.i("CJT", "onResume");
+        Logger.i("CJT", "onResume");
         super.onResume();
         jCameraView.onResume();
     }
 
     @Override
     protected void onPause() {
-        Log.i("CJT", "onPause");
+        Logger.i("CJT", "onPause");
         super.onPause();
         jCameraView.onPause();
     }

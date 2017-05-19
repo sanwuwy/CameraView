@@ -11,7 +11,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -28,6 +27,8 @@ import com.cjt2325.cameralibrary.lisenter.ErrorLisenter;
 import com.cjt2325.cameralibrary.lisenter.JCameraLisenter;
 import com.cjt2325.cameralibrary.lisenter.ReturnLisenter;
 import com.cjt2325.cameralibrary.lisenter.TypeLisenter;
+import com.cjt2325.cameralibrary.util.Logger;
+import com.cjt2325.cameralibrary.util.ScreenUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,9 +47,10 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
 
     private static final int TYPE_PICTURE = 0x001;
     private static final int TYPE_VIDEO = 0x002;
+    public static final String TYPE_CAPTURE = "type_capture";
 
     public static final int MEDIA_QUALITY_HIGH = 20 * 100000;
-    public static final int MEDIA_QUALITY_MIDDLE = 16 * 100000;
+    public static final int MEDIA_QUALITY_MIDDLE = 18 * 100000;
     public static final int MEDIA_QUALITY_LOW = 12 * 100000;
     public static final int MEDIA_QUALITY_POOR = 8 * 100000;
     public static final int MEDIA_QUALITY_FUNNY = 4 * 100000;
@@ -141,6 +143,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
         layout_width = outMetrics.widthPixels;
         fouce_size = layout_width / 4;
         CAMERA_STATE = STATE_IDLE;
+        screenProp = (float) ScreenUtils.getScreenWidth(mContext) / (float) ScreenUtils.getScreenHeight(mContext);
     }
 
 
@@ -259,7 +262,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
                                 CameraInterface.StopRecordCallback() {
                                     @Override
                                     public void recordResult(String url) {
-                                        Log.i(TAG, "Record Stopping ...");
+                                        Logger.i(TAG, "stopping ...");
                                         mCaptureLayout.isRecord(false);
                                         CAMERA_STATE = STATE_IDLE;
                                         stopping = false;
@@ -283,7 +286,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
                         .ErrorCallback() {
                     @Override
                     public void onError() {
-                        Log.i("CJT", "startRecorder error");
+                        Logger.i("CJT", "startRecorder error");
                         mCaptureLayout.isRecord(false);
                         CAMERA_STATE = STATE_WAIT;
                         stopping = false;
@@ -310,7 +313,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
                                     } else {
                                         mMediaPlayer.reset();
                                     }
-                                    Log.i("CJT", "URL = " + url);
+                                    Logger.i("CJT", "URL = " + url);
                                     mMediaPlayer.setDataSource(url);
                                     mMediaPlayer.setSurface(mVideoView.getHolder().getSurface());
                                     mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
@@ -320,6 +323,9 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
                                         @Override
                                         public void
                                         onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                                            Logger.i("CJT", "onVideoSizeChanged: width = " + width + ", height = " + height
+                                            + ", mMediaPlayer.getVideoWidth() = " + mMediaPlayer.getVideoWidth()
+                                            + ", mMediaPlayer.getVideoHeight() = " + mMediaPlayer.getVideoHeight());
                                             updateVideoViewSize(mMediaPlayer.getVideoWidth(), mMediaPlayer
                                                     .getVideoHeight());
                                         }
@@ -428,6 +434,14 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
         mFoucsView.setVisibility(INVISIBLE);
     }
 
+//    @Override
+//    protected void onAttachedToWindow() {
+//        super.onAttachedToWindow();
+//        setFocusViewWidthAnimation(getMeasuredWidth() / 2, getMeasuredHeight() / 2);
+//    }
+
+
+
     /**
      * stop preview
      */
@@ -453,7 +467,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
                     setFocusViewWidthAnimation(event.getX(), event.getY());
                 }
                 if (event.getPointerCount() == 2) {
-                    Log.i("CJT", "ACTION_DOWN = " + 2);
+                    Logger.i("CJT", "ACTION_DOWN = " + 2);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -479,7 +493,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
                         firstTouch = true;
                         CameraInterface.getInstance().setZoom(result - firstTouchLength, CameraInterface.TYPE_CAPTURE);
                     }
-                    Log.i("CJT", "result = " + (result - firstTouchLength));
+                    Logger.i("CJT", "result = " + (result - firstTouchLength));
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -625,7 +639,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.i("CJT", "surfaceCreated");
+        Logger.i("CJT", "surfaceCreated");
         new Thread() {
             @Override
             public void run() {
@@ -641,7 +655,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CamOpenO
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         onlyPause = false;
-        Log.i("CJT", "surfaceDestroyed");
+        Logger.i("CJT", "surfaceDestroyed");
         CameraInterface.getInstance().doDestroyCamera();
     }
 }

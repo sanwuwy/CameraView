@@ -39,13 +39,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
-                Log.i("JCameraView", "bitmap = " + bitmap.getWidth());
+                Logger.i("JCameraView", "bitmap = " + bitmap.getWidth());
             }
 
             @Override
             public void recordSuccess(String url) {
                 //获取视频路径
-                Log.i("CJT", "url = " + url);
+                Logger.i("CJT", "url = " + url);
             }
 
             @Override

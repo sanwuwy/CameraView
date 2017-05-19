@@ -48,7 +48,7 @@ public class CheckPermission {
                 audioRecord.stop();
                 audioRecord.release();
                 audioRecord = null;
-                Log.d("CheckAudioPermission", "录音机被占用");
+                Logger.d("CheckAudioPermission", "录音机被占用");
             }
             return STATE_RECORDING;
         } else {
@@ -64,7 +64,7 @@ public class CheckPermission {
                     audioRecord = null;
 
                 }
-                Log.d("CheckAudioPermission", "录音的结果为空");
+                Logger.d("CheckAudioPermission", "录音的结果为空");
                 return STATE_NO_PERMISSION;
 
             } else {

@@ -93,7 +93,7 @@ public class CaptureButtom extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int width = widthSize;
-        Log.i(TAG, "measureWidth = " + width);
+        Logger.i(TAG, "measureWidth = " + width);
         int height = (width / 9) * 4;
 
         setMeasuredDimension(width, height);
@@ -208,7 +208,7 @@ public class CaptureButtom extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-//                Log.i("CaptureButtom", "ACTION_DOWN");
+//                Logger.i("CaptureButtom", "ACTION_DOWN");
                 //空状态
                 if (STATE_SELECTED == STATE_LESSNESS) {
                     //返回按钮被按下
@@ -269,7 +269,7 @@ public class CaptureButtom extends View {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-//                Log.i("CaptureButtom", "ACTION_MOVE");
+//                Logger.i("CaptureButtom", "ACTION_MOVE");
                 if (event.getY() > btn_center_Y - btn_outside_radius &&
                         event.getY() < btn_center_Y + btn_outside_radius &&
                         event.getX() > btn_center_X - btn_outside_radius &&
@@ -282,7 +282,7 @@ public class CaptureButtom extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 removeCallbacks(longPressRunnable);
-//                Log.i("CaptureButtom", "ACTION_UP");
+//                Logger.i("CaptureButtom", "ACTION_UP");
                 if (STATE_SELECTED == STATE_READYQUIT) {
                     if (event.getY() > btn_return_Y - 37 &&
                             event.getY() < btn_return_Y + 10 &&
@@ -441,14 +441,14 @@ public class CaptureButtom extends View {
 
     private void captureAnimation(float left, float right) {
 //        Toast.makeText(mContext,left+ " = "+right,Toast.LENGTH_SHORT).show();
-        Log.i("CaptureButtom", left + "==" + right);
+        Logger.i("CaptureButtom", left + "==" + right);
         ValueAnimator left_anim = ValueAnimator.ofFloat(btn_left_X, left);
         ValueAnimator right_anim = ValueAnimator.ofFloat(btn_right_X, right);
         left_anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 btn_left_X = (float) animation.getAnimatedValue();
-                Log.i("CJT",btn_left_X+"=====");
+                Logger.i("CJT",btn_left_X+"=====");
                 invalidate();
             }
 

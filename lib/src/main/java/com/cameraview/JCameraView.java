@@ -225,7 +225,7 @@ public class JCameraView extends RelativeLayout implements SurfaceHolder.Callbac
 
             @Override
             public void scale(float scaleValue) {
-                Log.i(TAG, "scaleValue = " + scaleValue);
+                Logger.i(TAG, "scaleValue = " + scaleValue);
             }
         });
     }
@@ -261,13 +261,13 @@ public class JCameraView extends RelativeLayout implements SurfaceHolder.Callbac
             Iterator<Camera.Size> itor = sizeList.iterator();
             while (itor.hasNext()) {
                 Camera.Size cur = itor.next();
-                Log.i("CJT", "所有的  width = " + cur.width + " height = " + cur.height);
+                Logger.i("CJT", "所有的  width = " + cur.width + " height = " + cur.height);
                 if (cur.width >= width&& cur.height >= height) {
                     width = cur.width;
                     height = cur.height;
                 }
             }
-            Log.i("size", "width : height" + width + " : " + height + " ==== " + getWidth() + " : " + getHeight());
+            Logger.i("size", "width : height" + width + " : " + height + " ==== " + getWidth() + " : " + getHeight());
             parameters.setPreviewSize(width, height);//把camera.size赋值到parameters
             parameters.setPictureSize(width, height);
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
@@ -326,7 +326,7 @@ public class JCameraView extends RelativeLayout implements SurfaceHolder.Callbac
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         setStartPreview(mCamera, holder);
-        Log.i("Camera", "surfaceCreated");
+        Logger.i("Camera", "surfaceCreated");
     }
 
     @Override
@@ -341,7 +341,7 @@ public class JCameraView extends RelativeLayout implements SurfaceHolder.Callbac
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         releaseCamera();
-        Log.i("Camera", "surfaceDestroyed");
+        Logger.i("Camera", "surfaceDestroyed");
     }
 
     public void onResume() {

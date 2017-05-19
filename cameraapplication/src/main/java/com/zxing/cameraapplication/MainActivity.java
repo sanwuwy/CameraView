@@ -10,13 +10,14 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cjt2325.cameralibrary.CaptureActivity;
 import com.cjt2325.cameralibrary.util.DeviceUtil;
+import com.cjt2325.cameralibrary.util.Logger;
 
 public class MainActivity extends AppCompatActivity {
     private final int GET_PERMISSION_REQUEST = 100; //权限申请自定义码
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                             .PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager
                             .PERMISSION_GRANTED) {
-                startActivityForResult(new Intent(MainActivity.this, CameraActivity.class), 100);
+                startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 100);
             } else {
                 //不具有获取权限，需要进行权限申请
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.CAMERA}, GET_PERMISSION_REQUEST);
             }
         } else {
-            startActivityForResult(new Intent(MainActivity.this, CameraActivity.class), 100);
+            startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 100);
         }
     }
 
@@ -66,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 101) {
-            Log.i("CJT", "picture");
+            Logger.i("CJT", "picture");
             String path = data.getStringExtra("path");
             photo.setImageBitmap(BitmapFactory.decodeFile(path));
         }
         if (resultCode == 102) {
-            Log.i("CJT", "video");
+            Logger.i("CJT", "video");
             String path = data.getStringExtra("path");
         }
         if (resultCode == 103) {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     size++;
                 }
                 if (size == 0) {
-                    startActivityForResult(new Intent(MainActivity.this, CameraActivity.class), 100);
+                    startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 100);
                 } else {
                     Toast.makeText(this, "请到设置-权限管理中开启", Toast.LENGTH_SHORT).show();
                     finish();
